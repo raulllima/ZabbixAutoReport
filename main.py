@@ -138,11 +138,13 @@ for index, priority in enumerate(dataInfo):
             try:
                 if getDateInfo.getYear() not in ftp.nlst():
                     ftp.mkd(getDateInfo.getYear())
-                    ftp.cwd(getDateInfo.getYear())
+                
+                ftp.cwd(getDateInfo.getYear())
 
                 if getDateInfo.nameMonth() not in ftp.nlst():
                     ftp.mkd(getDateInfo.nameMonth())
-                    ftp.cwd(getDateInfo.nameMonth())
+                
+                ftp.cwd(getDateInfo.nameMonth())
 
                 nameFile = f"{dataInfo[index]['name']} - {getDateInfo.nameMonth()}.xlsx"
                 uploadFile = open(rf'./archives/{nameFile}', 'rb')
