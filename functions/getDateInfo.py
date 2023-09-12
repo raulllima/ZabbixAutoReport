@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 import locale
 from datetime import date
 
@@ -14,3 +13,6 @@ class getDateInfo():
 
     def nameMonth():
         return dateToday.strftime('%B').capitalize()
+    
+    def getYear():
+        return dateToday.strftime('%Y').capitalize()

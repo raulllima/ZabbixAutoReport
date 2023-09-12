@@ -136,6 +136,14 @@ for index, priority in enumerate(dataInfo):
 
         if ftp.login(envs.get('FTPUser'), envs.get('FTPPass')):
             try:
+                if getDateInfo.getYear() not in ftp.nlst():
+                    ftp.mkd(getDateInfo.getYear())
+                    ftp.cwd(getDateInfo.getYear())
+
+                if getDateInfo.nameMonth() not in ftp.nlst():
+                    ftp.mkd(getDateInfo.nameMonth())
+                    ftp.cwd(getDateInfo.nameMonth())
+
                 nameFile = f"{dataInfo[index]['name']} - {getDateInfo.nameMonth()}.xlsx"
                 uploadFile = open(rf'./archives/{nameFile}', 'rb')
                 ftp.storbinary(rf'STOR {nameFile}', uploadFile)
