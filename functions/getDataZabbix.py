@@ -46,6 +46,9 @@ class getDataZabbix():
                 'search': {
                     "key_": objKey
                 },
+                'filter': {
+                    'status': 0
+                }
             },
             'auth': self.auth_token,
             'id': 3
@@ -56,7 +59,11 @@ class getDataZabbix():
             if (',pused]' in item['key_']):
                 items.append(item)
             elif ('system.cpu.util' in item['key_'] and 'CPU utilization' in item['name']):
-                items.append(item)
+                if ('system.cpu.util[snmp]' in item['key_']):
+                    items.append(item)
+                    break
+                else:
+                    items.append(item)
             elif ('vm.memory.util' in item['key_']):
                 items.append(item)
 

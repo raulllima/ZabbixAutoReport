@@ -64,7 +64,6 @@ for index, priority in enumerate(dataInfo):
                         dataPerHost.append(f"{disk_name} - {history[0]}")
                 else:
                     dataPerHost.append(f"{history[0]}")
-
         excelFile.addRow(dataPerHost, styleFill={
             "setScaleColor": [
                 {
