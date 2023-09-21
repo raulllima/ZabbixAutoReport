@@ -24,6 +24,7 @@ class getDataZabbix():
             'method': 'host.get',
             'params': {
                 'output': ['hostid', 'host'],
+                'selectInterfaces': ['ip'],
                 'groupids': groupID,
                 'sortfield': 'host',
                 'filter': {

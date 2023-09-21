@@ -30,7 +30,22 @@ for index, priority in enumerate(dataInfo):
 
     excelFile = getDatasheet("./archives/", f"{dataInfo[index]['name']} - {getDateInfo.nameMonth()}.xlsx")
     excelFile.addSheet(getDateInfo.dateFormated())
-    excelFile.addRow(['HOSTNAME', 'CPU USAGE', 'MEMORY USAGE', 'DISK 0 USAGE', 'DISK 1 USAGE', 'DISK 2 USAGE', 'DISK 3 USAGE', 'DISK 4 USAGE', 'DISK 5 USAGE', 'DISK 6 USAGE', 'DISK 7 USAGE'])
+    excelFile.addRow(['HOSTNAME', 'CPU USAGE', 'MEMORY USAGE', 'DISK 0 USAGE', 'DISK 1 USAGE', 'DISK 2 USAGE', 'DISK 3 USAGE', 'DISK 4 USAGE', 'DISK 5 USAGE', 'DISK 6 USAGE', 'DISK 7 USAGE'], styleFill={
+        "setScaleColor": [
+            {
+                "font": {
+                    "size": 12,
+                    "bold": True,
+                    "color": '000000'
+                },
+                "fill": {
+                    "start_color": "FFFFFF",
+                    "end_color": "FFFFFF",
+                    "fill_type": "solid"
+                }
+            }
+        ]
+    })
 
     excelFile.style.font({
         "name": "Calibri Light",
@@ -130,27 +145,27 @@ for index, priority in enumerate(dataInfo):
         })
     excelFile.saveFile()
 
-    try:
-        ftp.connect(envs.get('FTPHost'), 21)
+    # try:
+    #     ftp.connect(envs.get('FTPHost'), 21)
 
-        if ftp.login(envs.get('FTPUser'), envs.get('FTPPass')):
-            try:
-                if getDateInfo.getYear() not in ftp.nlst():
-                    ftp.mkd(getDateInfo.getYear())
+    #     if ftp.login(envs.get('FTPUser'), envs.get('FTPPass')):
+    #         try:
+    #             if getDateInfo.getYear() not in ftp.nlst():
+    #                 ftp.mkd(getDateInfo.getYear())
                 
-                ftp.cwd(getDateInfo.getYear())
+    #             ftp.cwd(getDateInfo.getYear())
 
-                if getDateInfo.nameMonth() not in ftp.nlst():
-                    ftp.mkd(getDateInfo.nameMonth())
+    #             if getDateInfo.nameMonth() not in ftp.nlst():
+    #                 ftp.mkd(getDateInfo.nameMonth())
                 
-                ftp.cwd(getDateInfo.nameMonth())
+    #             ftp.cwd(getDateInfo.nameMonth())
 
-                nameFile = f"{dataInfo[index]['name']} - {getDateInfo.nameMonth()}.xlsx"
-                uploadFile = open(rf'./archives/{nameFile}', 'rb')
-                ftp.storbinary(rf'STOR {nameFile}', uploadFile)
-                uploadFile.close()
-            except Exception as e:
-                print(e)
+    #             nameFile = f"{dataInfo[index]['name']} - {getDateInfo.nameMonth()}.xlsx"
+    #             uploadFile = open(rf'./archives/{nameFile}', 'rb')
+    #             ftp.storbinary(rf'STOR {nameFile}', uploadFile)
+    #             uploadFile.close()
+    #         except Exception as e:
+    #             print(e)
 
-    except Exception as e:
-        print(e)
+    # except Exception as e:
+    #     print(e)

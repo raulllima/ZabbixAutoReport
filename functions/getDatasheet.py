@@ -19,33 +19,50 @@ class getDatasheet():
         self.ws.iter_rows()
 
     def addSheet(self, nameSheet):
-        self.wb.create_sheet(nameSheet)
-        self.ws = self.wb[nameSheet]
+        if nameSheet in self.wb.sheetnames:
+            self.ws = self.wb[nameSheet]
+            return False
+        else:
+            self.wb.create_sheet(nameSheet)
+            self.ws = self.wb[nameSheet]
+            return True
 
     def addRow(self, data, styleFill=None):
         self.ws.append(data)
-
+        
         if styleFill:
             for column, item in enumerate(data, start=1):
-                if column != 1:
-                    currentLine = self.ws.max_row
-                    itemStrFormatted = re.findall(r'(\d+\.\d+)%', item)
-                
-                    if itemStrFormatted:
-                        cell = self.ws.cell(row=currentLine, column=column)
-                        itemFloatFormatted = float(itemStrFormatted[0])
-                        
-                        for index, color in enumerate(styleFill['setScaleColor']):
-                            if itemFloatFormatted >= color['startFilter'] and itemFloatFormatted < color['endFilter']:
-                                if color['font']:
-                                    cell.font = Font(**color['font'])
+                currentLine = self.ws.max_row
+
+                if styleFill['setHeadScaleColor']:
+                    cell = self.ws.cell(row=currentLine, column=column)
+
+                    for index, color in enumerate(styleFill['setHeadScaleColor']):
+                        if color['font']:
+                            cell.font = Font(**color['font'])
                                 
-                                if color['fill']:
-                                    cell.fill = PatternFill(**color['fill'])
-                    else:
-                        cell = self.ws.cell(row=currentLine, column=column)
-                        cell.font = Font(size=12, bold=True, color="FFFFFF")
-                        cell.fill = PatternFill(start_color="434343", end_color="434343", fill_type="solid")
+                        if color['fill']:
+                            cell.fill = PatternFill(**color['fill'])
+
+                elif styleFill['setLineScaleColor']:
+                    if column != 1:
+                        itemStrFormatted = re.findall(r'(\d+\.\d+)%', item)
+                    
+                        if itemStrFormatted:
+                            cell = self.ws.cell(row=currentLine, column=column)
+                            itemFloatFormatted = float(itemStrFormatted[0])
+                            
+                            for index, color in enumerate(styleFill['setLineScaleColor']):
+                                if itemFloatFormatted >= color['startFilter'] and itemFloatFormatted < color['endFilter']:
+                                    if color['font']:
+                                        cell.font = Font(**color['font'])
+                                    
+                                    if color['fill']:
+                                        cell.fill = PatternFill(**color['fill'])
+                        else:
+                            cell = self.ws.cell(row=currentLine, column=column)
+                            cell.font = Font(size=12, bold=True, color="FFFFFF")
+                            cell.fill = PatternFill(start_color="434343", end_color="434343", fill_type="solid")
 
     def saveFile(self) -> None:
         self.wb.save(self.pathFile + self.excelFile) 
