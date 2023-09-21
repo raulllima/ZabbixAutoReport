@@ -28,7 +28,7 @@ for index, priority in enumerate(dataInfo):
 
     hosts = zbxInstance.getHosts(priority['id'])
 
-    excelFile = getDatasheet("./archives/", nameFile)
+    excelFile = getDatasheet("/root/producao/vmware/archives/", nameFile)
     
     if excelFile.addSheet("CPU Usage"):
         excelFile.addRow(["Data Coleta","Hora Coleta","IP","Hostname","CPU Usage"], styleFill={
@@ -87,26 +87,26 @@ for index, priority in enumerate(dataInfo):
         excelFile.addRow(dataPerHost)
     excelFile.saveFile()
 
-    # try:
-    #     ftp.connect(envs.get('FTPHost'), 21)
+    try:
+        ftp.connect(envs.get('FTPHost'), 21)
 
-    #     if ftp.login(envs.get('FTPUser'), envs.get('FTPPass')):
-    #         try:
-    #             if getDateInfo.getYear() not in ftp.nlst():
-    #                 ftp.mkd(getDateInfo.getYear())
+        if ftp.login(envs.get('FTPUser'), envs.get('FTPPass')):
+            try:
+                if getDateInfo.getYear() not in ftp.nlst():
+                    ftp.mkd(getDateInfo.getYear())
                 
-    #             ftp.cwd(getDateInfo.getYear())
+                ftp.cwd(getDateInfo.getYear())
 
-    #             if getDateInfo.nameMonth() not in ftp.nlst():
-    #                 ftp.mkd(getDateInfo.nameMonth())
+                if getDateInfo.nameMonth() not in ftp.nlst():
+                    ftp.mkd(getDateInfo.nameMonth())
                 
-    #             ftp.cwd(getDateInfo.nameMonth())
+                ftp.cwd(getDateInfo.nameMonth())
 
-    #             uploadFile = open(rf'./archives/{nameFile}', 'rb')
-    #             ftp.storbinary(rf'STOR {nameFile}', uploadFile)
-    #             uploadFile.close()
-    #         except Exception as e:
-    #             print(e)
+                uploadFile = open(rf'./archives/{nameFile}', 'rb')
+                ftp.storbinary(rf'STOR {nameFile}', uploadFile)
+                uploadFile.close()
+            except Exception as e:
+                print(e)
 
-    # except Exception as e:
-    #     print(e)
+    except Exception as e:
+        print(e)
